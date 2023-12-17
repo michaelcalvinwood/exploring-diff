@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonSelect, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonSelect, IonSelectOption, IonTitle, IonToolbar } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
 import './Home.scss';
 import { useEffect, useState } from 'react';
@@ -7,7 +7,7 @@ import Diff from '../components/Diff';
 const Home = () => {
   const [orig, setOrig] = useState('beep boop');
   const [modified, setModified ] = useState('beep boob blah');
-  const [model, setModel] = useState('AcMod_01');
+  const [modelId, setModelId] = useState('AcMod_01');
 
   const models = [
     {
@@ -52,16 +52,24 @@ const Home = () => {
     }
   ]
 
-
+  const selectedModel = models.find(model => model.id === modelId)
 
   
   return (
     <IonPage>
      
       <IonContent fullscreen>
-        <IonSelect>
-
-        </IonSelect>
+       <div className="Home__select-container">
+        <IonSelect className='Home__select' value={selectedModel.id}>
+            {models.map(model => {
+              return (
+                <IonSelectOption className='Home__option' key={model.id} value={model.id}>
+                  {model.name}
+                </IonSelectOption>
+              )
+            })}
+          </IonSelect>
+       </div>
         <div className='Home__diff'>
           <Diff  orig={orig} modified={modified} />
         </div>
