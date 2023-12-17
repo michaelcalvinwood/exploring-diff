@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonSelect, IonSelectOption, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonSelect, IonSelectOption, IonTextarea, IonTitle, IonToolbar } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
 import './Home.scss';
 import { useEffect, useState } from 'react';
@@ -8,6 +8,7 @@ const Home = () => {
   const [orig, setOrig] = useState('beep boop');
   const [modified, setModified ] = useState('beep boob blah');
   const [modelId, setModelId] = useState('AcMod_01');
+  const [input, setInput] = useState('');
 
   const models = [
     {
@@ -54,7 +55,8 @@ const Home = () => {
 
   const selectedModel = models.find(model => model.id === modelId)
 
-  
+
+
   return (
     <IonPage>
      
@@ -70,6 +72,8 @@ const Home = () => {
             })}
           </IonSelect>
        </div>
+       <h2 className='Home__input-title'>Input</h2>
+       <IonTextarea className='Home__input' rows='12' value={input} onIonChange={(e) => setInput(e.detail.value)} />
         <div className='Home__diff'>
           <Diff  orig={orig} modified={modified} />
         </div>
