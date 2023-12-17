@@ -2,6 +2,8 @@ import { IonButton, IonContent, IonHeader, IonPage, IonSelect, IonSelectOption, 
 import ExploreContainer from '../components/ExploreContainer';
 import './Home.scss';
 import { useEffect, useState } from 'react';
+import axios from 'axios';
+
 //import * as Diff from 'diff';
 import Diff from '../components/Diff';
 const Home = () => {
@@ -9,6 +11,7 @@ const Home = () => {
   const [modified, setModified ] = useState('beep boob blah');
   const [modelId, setModelId] = useState('AcMod_01');
   const [input, setInput] = useState('');
+  const [output, setOutput] = useState('');
 
   const models = [
     {
@@ -55,9 +58,40 @@ const Home = () => {
 
   const selectedModel = models.find(model => model.id === modelId)
 
+  const textNormalization = () => {
+    const request = {
+      url: `https://api.fusaion.ai:5000/textNormalization`,
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: {
+        text: input
+      }
+    }
+
+    axios(request)
+    .then(response => {
+      setOutput(response.data);
+      console.log('output', response.data)
+    })
+    .catch(err => {
+      alert('Could not perform Text Normalization')
+      console.error(err);
+    })
+  }
   
   const handleSubmit = () => {
-    console.log('input', input)
+    console.log('input', input);
+
+    switch (modelId) {
+      case 'AcMod_01':
+        textNormalization();
+        break;
+      
+      default:
+        alert(`Unhandled Model: ${modelId}`);
+    }
   }
 
   return (
@@ -79,7 +113,7 @@ const Home = () => {
        <IonTextarea className='Home__input' rows='12' value={input} onIonChange={(e) => setInput(e.detail.value)} />
        <IonButton className='Home__submit-button' onClick={handleSubmit}>Sumbit</IonButton>
         <div className='Home__diff'>
-          <Diff  orig={orig} modified={modified} />
+          {output !== '' && <Diff  orig={input} modified={output} /> }
         </div>
        <div id='display'></div>
       </IonContent>

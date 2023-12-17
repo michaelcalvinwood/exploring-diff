@@ -1,15 +1,24 @@
 import './Diff.scss';
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import * as DiffDisplay from 'diff';
+import { IonToggle } from '@ionic/react';
 
 
 function Diff({orig, modified}) {
+    const [showRaw, setShowRaw] = useState(false);
+
     const ref = useRef();
 
     const showDiff = () => {
         const diff = DiffDisplay.diffChars(orig, modified),
         display = ref.current,
         fragment = document.createDocumentFragment();
+
+        if (showRaw) {
+          display.innerText = modified;
+          return;
+        }
+
         display.innerHTML = '';
         let span = null;
     
@@ -31,7 +40,17 @@ function Diff({orig, modified}) {
       useEffect(() => showDiff());
 
   return (
-    <div className='Diff' ref={ref}>Diff</div>
+    <div >
+      <IonToggle checked={!showRaw} onIonChange={(e) => {
+        console.log('toggle');
+        setShowRaw(!e.target.checked)
+      }}>Display Diff</IonToggle>
+      <div className="Diff" ref={ref}>
+
+      </div>
+    </div>
+
+    
   )
 }
 
