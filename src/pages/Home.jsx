@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonSelect, IonSelectOption, IonTextarea, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonContent, IonHeader, IonPage, IonSelect, IonSelectOption, IonTextarea, IonTitle, IonToolbar } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
 import './Home.scss';
 import { useEffect, useState } from 'react';
@@ -55,7 +55,10 @@ const Home = () => {
 
   const selectedModel = models.find(model => model.id === modelId)
 
-
+  
+  const handleSubmit = () => {
+    console.log('input', input)
+  }
 
   return (
     <IonPage>
@@ -74,6 +77,7 @@ const Home = () => {
        </div>
        <h2 className='Home__input-title'>Input</h2>
        <IonTextarea className='Home__input' rows='12' value={input} onIonChange={(e) => setInput(e.detail.value)} />
+       <IonButton className='Home__submit-button' onClick={handleSubmit}>Sumbit</IonButton>
         <div className='Home__diff'>
           <Diff  orig={orig} modified={modified} />
         </div>
