@@ -56,6 +56,8 @@ const Home = () => {
     }
   ]
 
+  console.log('modelId', modelId);
+
   const selectedModel = models.find(model => model.id === modelId)
 
   const textNormalization = () => {
@@ -80,6 +82,29 @@ const Home = () => {
       console.error(err);
     })
   }
+
+  const coreferenceResolution = () => {
+    const request = {
+      url: `https://api.fusaion.ai:5000/coreferenceResolution`,
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: {
+        text: input
+      }
+    }
+
+    axios(request)
+    .then(response => {
+      setOutput(response.data);
+      console.log('output', response.data)
+    })
+    .catch(err => {
+      alert('Could not perform Coreference Resolution')
+      console.error(err);
+    })
+  }
   
   const handleSubmit = () => {
     console.log('input', input);
@@ -88,6 +113,9 @@ const Home = () => {
     switch (modelId) {
       case 'AcMod_01':
         textNormalization();
+        break;
+      case 'AcMod_02':
+        coreferenceResolution();
         break;
       
       default:
@@ -100,7 +128,7 @@ const Home = () => {
      
       <IonContent fullscreen>
        <div className="Home__select-container">
-        <IonSelect className='Home__select' value={selectedModel.id}>
+        <IonSelect className='Home__select' value={selectedModel.id} onIonChange={(e) => setModelId(e.detail.value)}>
             {models.map(model => {
               return (
                 <IonSelectOption className='Home__option' key={model.id} value={model.id}>
