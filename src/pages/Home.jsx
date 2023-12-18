@@ -16,43 +16,43 @@ const Home = () => {
   const models = [
     {
       id: 'AcMod_01',
-      name: 'Text Normalization'
+      name: 'AI Text Normalization'
     },
     {
       id: 'AcMod_02',
-      name: 'CoReference Resolution'
+      name: 'AI CoReference Resolution'
     },
     {
       id: 'AcMod_03',
-      name: 'Temporal Identification'
+      name: 'AI Temporal Identification'
     },
     {
       id: 'AcMod_04',
-      name: 'Relevance Determination'
+      name: 'AI Relevance Determination'
     },
     {
       id: 'AcMod_05',
-      name: 'AGI Extractor'
+      name: 'AI AGI Extractor'
     },
     {
       id: 'AcNLP_01',
-      name: 'Query Firewall'
+      name: 'NLP Query Firewall'
     },
     {
       id: 'AcNLP_02',
-      name: 'Temporal Time Correction'
+      name: 'NLP Temporal Time Correction'
     },
     {
       id: 'AcNLP_03',
-      name: 'Quote Correction'
+      name: 'NLP Quote Correction'
     },
     {
       id: 'AcNLP_04',
-      name: 'Noun Phrase Reconciliation'
+      name: 'NLP Noun Phrase Reconciliation'
     },
     {
       id: 'AcNLP_05',
-      name: 'Image and Citation Linkification'
+      name: 'NLP Image and Citation Linkification'
     }
   ]
 
@@ -106,6 +106,29 @@ const Home = () => {
     })
   }
   
+const temporalTimeCorrection = () => {
+    const request = {
+      url: `http://contextsplitter.com:6201/time-adjustment`,
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: {
+        text: input,
+        date: '2023-12-12'
+      }
+    }
+
+    axios(request)
+    .then(response => {
+      setOutput(response.data);
+      console.log('output', response.data)
+    })
+    .catch(err => {
+      alert('Could not perform Coreference Resolution')
+      console.error(err);
+    })
+  }
   const handleSubmit = () => {
     console.log('input', input);
     setOutput('');
@@ -117,7 +140,9 @@ const Home = () => {
       case 'AcMod_02':
         coreferenceResolution();
         break;
-      
+      case 'AcNLP_02':
+        temporalTimeCorrection();
+        break;
       default:
         alert(`Unhandled Model: ${modelId}`);
     }
