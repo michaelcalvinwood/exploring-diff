@@ -83,6 +83,7 @@ const Home = () => {
   
   const handleSubmit = () => {
     console.log('input', input);
+    setOutput('');
 
     switch (modelId) {
       case 'AcMod_01':

@@ -6,38 +6,41 @@ import { IonToggle } from '@ionic/react';
 
 function Diff({orig, modified}) {
     const [showRaw, setShowRaw] = useState(false);
+    const [html, setHtml] = useState('');
+
+    console.log('showRaw', showRaw)
 
     const ref = useRef();
 
     const showDiff = () => {
-        const diff = DiffDisplay.diffChars(orig, modified),
-        display = ref.current,
-        fragment = document.createDocumentFragment();
+      console.log('showDiff()')
+        const diff = DiffDisplay.diffChars(orig, modified);
+        // display = ref.current,
+        // fragment = document.createDocumentFragment();
 
-        if (showRaw) {
-          display.innerText = modified;
-          return;
-        }
-
-        display.innerHTML = '';
+        // display.innerHTML = '';
         let span = null;
+        const parts = [];
     
         diff.forEach((part) => {
           // green for additions, red for deletions
           // grey for common parts
           const color = part.added ? 'green' :
             part.removed ? 'red' : 'grey';
-          span = document.createElement('span');
-          span.style.color = color;
-          span.appendChild(document
-            .createTextNode(part.value));
-          fragment.appendChild(span);
+          parts.push(`<span style="color: ${color}">${part.value}</span>`);
+          // span = document.createElement('span');
+          // span.style.color = color;
+          // span.appendChild(document
+          //   .createTextNode(part.value));
+          // fragment.appendChild(span);
         });
     
-        display.appendChild(fragment);
+        // display.appendChild(fragment);
+        //display.innerHTML = parts.join("");
+        setHtml(parts.join(''))
       }
 
-      useEffect(() => showDiff());
+      useEffect(showDiff, [orig, modified]);
 
   return (
     <div >
@@ -45,9 +48,9 @@ function Diff({orig, modified}) {
         console.log('toggle');
         setShowRaw(!e.target.checked)
       }}>Display Diff</IonToggle>
-      <div className="Diff" ref={ref}>
-
-      </div>
+      {!showRaw && <div className="Diff" dangerouslySetInnerHTML={{__html: html}}/>}
+      {showRaw && <div className="Diff" dangerouslySetInnerHTML={{__html: modified}}/>}
+      
     </div>
 
     
